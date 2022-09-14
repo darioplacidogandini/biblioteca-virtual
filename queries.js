@@ -41,8 +41,22 @@ const addBook = (request, response) => {
     }) 
 }
 
+const updateBook = (request, response) => {
+    const id = parseInt(request.params.id)
+    const {title, author} = request.body
+
+    pool.query('UPDATE books SET title = $1, author = $2 WHERE id = $3',
+    [title, author, id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`Book modified with ID: ${id}`)
+    })
+}
+
 module.exports = {
     getBooks,
     getBookById,
     addBook,
+    updateBook,
 }
