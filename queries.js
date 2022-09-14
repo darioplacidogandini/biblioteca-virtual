@@ -10,7 +10,18 @@ const pool = new Pool({
 })
 
 const getBooks = (request,response) => {
-    pool.query('SELECT * FROM books ORDER BY id ASC ', (error, results) => {
+    pool.query('SELECT * FROM books ORDER BY id ASC', (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getBookById = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('SELECT * FROM books WHERE id = $1', [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -19,16 +30,19 @@ const getBooks = (request,response) => {
 }
 
 const addBook = (request, response) => {
-    const {name, email} = request.body
+    const {title, author} = request.body
 
-    pool.query('INSER INTO users (title, author) VALUES ($1, $2)'), 
-    [name, email], (error, results) => {
+    pool.query('INSERT INTO users (title, author) VALUES ($1, $2) rRETURNING *', 
+    [title, author], (error, results) => {
         if (error) {
             throw error
         }
+        response.status(201).send(`Book added with ID: ${results.rows[0].id}`)
     }) 
 }
 
 module.exports = {
     getBooks,
+    getBookById,
+    addBook,
 }

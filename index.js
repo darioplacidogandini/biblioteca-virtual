@@ -20,3 +20,5 @@ app.listen(port, () => {
 })
 
 app.get('/books', db.getBooks)
+app.get('/books/:id', db.getBookById)
+app.post('/books',db.addBook)
