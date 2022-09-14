@@ -22,3 +22,5 @@ app.listen(port, () => {
 app.get('/books', db.getBooks)
 app.get('/books/:id', db.getBookById)
 app.post('/books',db.addBook)
+app.put('/books/:id',db.updateBook)
+app.delete('/users/:id',db.removeBook)
